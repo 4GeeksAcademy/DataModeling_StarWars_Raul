@@ -16,6 +16,7 @@ class Planet(Base):
     gravity = Column(Float, nullable=False)
     population = Column(Integer, nullable=False)
     image = Column(String(250))
+    character = relationship("Character", backref = "planet", lazy =True)
 
 # enumerate((0,"Male"),(1,"Female"),(2,"Other"))
 
@@ -28,7 +29,7 @@ class Character(Base):
     specie = Column(String(250), nullable=False)
     genre = Column(String(250), nullable=False)
     planet_id = Column(Integer, ForeignKey('planet.id'))
-    planet = relationship(Planet)
+    starship = relationship("Starship", secondary="characters_starships", lazy = "subquery", backref="character")
 
 class Starship(Base):
     __tablename__ = 'starship'
@@ -47,7 +48,6 @@ class Characters_Starships(Base):
     character_id = Column(Integer, ForeignKey('character.id'))
     character = relationship(Character)
     starship_id = Column(Integer, ForeignKey('starship.id'))
-    starship = relationship(Starship)
 
     def to_dict(self):
         return {}
